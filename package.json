@@ -21,7 +21,8 @@
   "dependencies": {
     "zipkin": "^0.18.5",
     "zipkin-context-cls": "^0.18.5",
-    "zipkin-transport-http": "^0.18.5"
+    "zipkin-transport-http": "^0.18.5",
+    "node-fetch": "^2.6.0"
   },
   "devDependencies": {
     "typescript": "^3.4.4",
