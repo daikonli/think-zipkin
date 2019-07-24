@@ -28,6 +28,14 @@ const formatRequestUrl = (req: any): string => {
   })
 }
 
+const getRequestUrl = (req: any): string => {
+  const parsed = url.parse(req.originalUrl)
+  return url.format({
+    pathname: parsed.pathname,
+    search: parsed.search
+  })
+}
+
 const readHeader = (req: any, headerName: string) => {
   const val = getHeaderValue(req, headerName)
   if (val != null) {
@@ -90,7 +98,7 @@ module.exports = (options: IOptions) => {
     tracer.scoped(() => {
       tracer.setId(traceId)
       tracer.recordServiceName(serviceName)
-      tracer.recordRpc(req.method.toUpperCase())
+      tracer.recordRpc(`${req.method.toUpperCase()}/${getRequestUrl(req)}`)
       tracer.recordBinary('http.url', formatRequestUrl(req))
       tracer.recordAnnotation(new zipkin.Annotation.ServerRecv())
       tracer.recordLocalAddr({ port })
