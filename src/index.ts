@@ -60,13 +60,6 @@ module.exports = (options: IOptions) => {
     const req = ctx.request
     const res = ctx.response
 
-    ctx.response.set('Access-Control-Allow-Origin', '*')
-    ctx.response.set('Access-Control-Allow-Headers', [
-      'Origin', 'Accept', 'X-Requested-With', 'X-B3-TraceId',
-      'X-B3-ParentSpanId', 'X-B3-SpanId', 'X-B3-Sampled'
-    ].join(', '))
-
-
     if (containsRequiredHeaders(req)) {
       const spanId = readHeader(req, zipkin.HttpHeaders.SpanId)
       spanId.ifPresent((sid: string) => {
