@@ -1,0 +1,35 @@
+{
+  "name": "@daikonli/think-zipkin",
+  "version": "0.0.2",
+  "description": "zipkin for Think3.x",
+  "main": "lib/index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/daikonli/think-zipkin.git"
+  },
+  "keywords": [
+    "zipkin"
+  ],
+  "author": "liyuecheng",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/daikonli/think-zipkin/issues"
+  },
+  "dependencies": {
+    "zipkin": "^0.18.5",
+    "zipkin-context-cls": "^0.18.5",
+    "zipkin-transport-http": "^0.18.5"
+  },
+  "devDependencies": {
+    "typescript": "^3.4.4",
+    "@types/koa": "^2.0.39",
+    "@types/node": "^8.0.20"
+  },
+  "homepage": "https://github.com/daikonli/think-zipkin#readme",
+  "directories": {
+    "lib": "lib"
+  }
+}
