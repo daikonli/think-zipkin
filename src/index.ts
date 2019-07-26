@@ -5,6 +5,7 @@ interface IOptions {
   tracer: zipkin.Tracer
   serviceName?: string
   port?: number
+  forbidUrl?: string[]
 }
 
 
@@ -22,7 +23,7 @@ const formatRequestUrl = (req: any): string => {
   const parsed = url.parse(req.originalUrl)
   return url.format({
     protocol: req.protocol,
-    host: req.header['host'],
+    host: req.header.host,
     pathname: parsed.pathname,
     search: parsed.search
   })
@@ -49,6 +50,7 @@ module.exports = (options: IOptions) => {
   const tracer: any = options.tracer
   const serviceName = options.serviceName || 'unknown'
   const port = options.port || 0
+  const forbidUrl = options.forbidUrl || []
 
   if (!tracer) {
     return async (ctx: any, next: any) => {
@@ -59,6 +61,13 @@ module.exports = (options: IOptions) => {
   return async (ctx: any, next: any) => {
     const req = ctx.request
     const res = ctx.response
+
+    const reqUrl = getRequestUrl(req)
+
+    if (forbidUrl.filter((v) => v === reqUrl).length === 0) {
+      await next()
+      return
+    }
 
     if (containsRequiredHeaders(req)) {
       const spanId = readHeader(req, zipkin.HttpHeaders.SpanId)
@@ -91,7 +100,7 @@ module.exports = (options: IOptions) => {
     tracer.scoped(() => {
       tracer.setId(traceId)
       tracer.recordServiceName(serviceName)
-      tracer.recordRpc(`${req.method.toUpperCase()}/${getRequestUrl(req)}`)
+      tracer.recordRpc(`${req.method.toUpperCase()}:${getRequestUrl(req)}`)
       tracer.recordBinary('http.url', formatRequestUrl(req))
       tracer.recordAnnotation(new zipkin.Annotation.ServerRecv())
       tracer.recordLocalAddr({ port })
